@@ -67,7 +67,7 @@
           "fullscreen": "False",
           "size_x": 1920,
           "size_y": 962,
-          "title": "Openstack DEV",
+          "title": "My Terminal Window",
           "main_element": {
             "type": "notebook",
             "tabs": [
