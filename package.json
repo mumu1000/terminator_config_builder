@@ -1,0 +1,21 @@
+{
+  "name": "terminator_conf_generator",
+  "version": "1.0.0",
+  "description": "Generates valid terminator config from json template",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "terminator"
+  ],
+  "author": "Amiel Rivier",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/uuid": "^9.0.1",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "uuid": "^9.0.0"
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "global_config": [
+    {
+      "key": "dbus",
+      "value": "False"
+    },
+    {
+      "key": "suppress_multiple_term_dialog",
+      "value": "True"
+    }
+  ],
+  "keybindings": [
+    {
+      "key": "new_tab",
+      "value": "<Shift><Alt>t"
+    },
+    {
+      "key": "split_horiz",
+      "value": "<Shift><Alt>Down"
+    },
+    {
+      "key": "split_vert",
+      "value": "<Shift><Alt>Right"
+    },
+    {
+      "key": "broadcast_off",
+      "value": "<Alt>p"
+    },
+    {
+      "key": "broadcast_group",
+      "value": "<Alt>o"
+    },
+    {
+      "key": "broadcast_all",
+      "value": "<Alt>i"
+    }
+  ],
+  "profiles": [
+    {
+      "name": "default",
+      "font": "Ubuntu Mono 9",
+      "cursor_color": "#aaaaaa",
+      "scrollback_infinite": "True",
+      "exit_action": "hold"
+    }
+  ],
+  "command_templates": [
+    {
+      "name": "echo",
+      "elements": [
+        {
+          "type": "litteral",
+          "content": "echo "
+        },
+        {
+          "type": "parameter"
+        }
+      ]
+    }
+  ],
+  "layouts": [
+    {
+      "name": "Openstack DEV",
+      "windows": [
+        {
+          "maximised": "True",
+          "fullscreen": "False",
+          "size_x": 1920,
+          "size_y": 962,
+          "title": "Openstack DEV",
+          "main_element": {
+            "type": "horizontal_split",
+            "first_element": {
+              "type": "vertical_split",
+              "first_element": {
+                "type": "templated_terminal",
+                "template_name": "echo",
+                "title": "Terminal 1 1",
+                "group": "Group 1",
+                "profile": "default",
+                "arguments": [
+                  "terminal1_1"
+                ]
+              },
+              "second_element": {
+                "type": "templated_terminal",
+                "template_name": "echo",
+                "title": "Terminal 1 2",
+                "group": "Group 1",
+                "profile": "default",
+                "arguments": [
+                  "terminal1_2"
+                ]
+              }
+            },
+            "second_element": {
+              "type": "vertical_split",
+              "first_element": {
+                "type": "templated_terminal",
+                "template_name": "echo",
+                "title": "Terminal 2 1",
+                "group": "Group 2",
+                "profile": "default",
+                "arguments": [
+                  "terminal2_1"
+                ]
+              },
+              "second_element": {
+                "type": "templated_terminal",
+                "template_name": "echo",
+                "title": "Terminal 2 2",
+                "group": "Group 2",
+                "profile": "default",
+                "arguments": [
+                  "terminal2_2"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
