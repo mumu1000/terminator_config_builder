@@ -12,6 +12,7 @@
   "author": "Amiel Rivier",
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "^20.2.4",
     "@types/uuid": "^9.0.1",
     "typescript": "^5.0.4"
   },

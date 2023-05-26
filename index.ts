@@ -1,7 +1,4 @@
 import { v4 as uuid } from "uuid"
-
-import * as input from './json_example.json'
-
 abstract class CommandTemplateElement {
   type: string;
   constructor(type: string) {
@@ -418,30 +415,20 @@ function parseConfig(jsonConfig: any): Config {
   }
   return new Config(globalConfig, keybindings, profiles, layouts)
 }
-// console.log(JSON.stringify(parseConfig(input)))
 
-parseConfig(input).render()
+//Thanks to https://gist.github.com/kristopherjohnson/5065599
 
-// const testtemplate =     {
-//   "name": "echo",
-//   "elements": [
-//     {
-//       "type": "litteral",
-//       "content": "echo "
-//     },
-//     {
-//       "type": "parameter"
-//     }
-//   ]
-// }
+const stdin = process.stdin
+const inputChunks:any = [];
 
-// const testjson = {
-//   "type": "templated_terminal",
-//   "template_name": "echo",
-//   "title": "Terminal 2 1",
-//   "group": "Group 2",
-//   "profile": "default",
-//   "arguments": [
-//     "terminal2_1"
-//   ]
-// }
+stdin.setEncoding('utf8');
+
+stdin.on('data', function (chunk) {
+    inputChunks.push(chunk);
+});
+
+stdin.on('end', function () {
+
+  parseConfig(JSON.parse(inputChunks.join())).render()
+
+});
