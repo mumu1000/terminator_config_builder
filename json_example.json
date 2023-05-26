@@ -151,27 +151,39 @@
                     }
                   },
                   "second_element": {
-                    "type": "horizontal_split",
-                    "first_element": {
-                      "type": "templated_terminal",
-                      "template_name": "echo",
-                      "title": "Terminal 2 1",
-                      "group": "Group 2",
-                      "profile": "default",
-                      "arguments": [
-                        "terminal2_1"
-                      ]
-                    },
-                    "second_element": {
-                      "type": "templated_terminal",
-                      "template_name": "echo",
-                      "title": "Terminal 2 2",
-                      "group": "Group 2",
-                      "profile": "default",
-                      "arguments": [
-                        "terminal2_2"
-                      ]
-                    }
+                    "type": "horizontal_spread",
+                    "elements": [
+                      {
+                        "type": "templated_terminal",
+                        "template_name": "echo",
+                        "title": "Terminal 2 1",
+                        "group": "Group 2",
+                        "profile": "default",
+                        "arguments": [
+                          "terminal2_1"
+                        ]
+                      },
+                      {
+                        "type": "templated_terminal",
+                        "template_name": "echo",
+                        "title": "Terminal 2 2",
+                        "group": "Group 2",
+                        "profile": "default",
+                        "arguments": [
+                          "terminal2_2"
+                        ]
+                      },
+                      {
+                        "type": "templated_terminal",
+                        "template_name": "echo",
+                        "title": "Terminal 2 3",
+                        "group": "Group 2",
+                        "profile": "default",
+                        "arguments": [
+                          "terminal2_3"
+                        ]
+                      }
+                    ]
                   }
                 }
               }

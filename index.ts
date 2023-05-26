@@ -167,18 +167,20 @@ class TemplatedTerminalElement extends ContainedLayoutElement {
 class HorizontalSplitElement extends ContainedLayoutElement {
   first_element: ContainedLayoutElement;
   second_element: ContainedLayoutElement;
+  ratio?: string;
 
-  constructor(first_element: ContainedLayoutElement, second_element: ContainedLayoutElement) {
+  constructor(first_element: ContainedLayoutElement, second_element: ContainedLayoutElement, ratio?: string) {
     super('horizontal_split');
     this.first_element = first_element
     this.second_element = second_element
+    this.ratio = ratio
   }
   render(parent_uuid: string, order: number): void {
     console.log(`    [[[${this.uuid}]]]`);
     console.log('      type = HPaned');
     console.log('      parent = ' + parent_uuid);
     console.log('      order = ' + order);
-    console.log('      ratio = 0.5');
+    console.log('      ratio = ' + (this.ratio ?? '0.5'));
     this.first_element.render(this.uuid, 0);
     this.second_element.render(this.uuid, 1);
   }
@@ -187,18 +189,20 @@ class HorizontalSplitElement extends ContainedLayoutElement {
 class VerticalSplitElement extends ContainedLayoutElement {
   first_element: ContainedLayoutElement;
   second_element: ContainedLayoutElement;
+  ratio?: string;
 
-  constructor(first_element: ContainedLayoutElement, second_element: ContainedLayoutElement) {
+  constructor(first_element: ContainedLayoutElement, second_element: ContainedLayoutElement, ratio?: string) {
     super('vertical_split');
     this.first_element = first_element
     this.second_element = second_element
+    this.ratio = ratio
   }
   render(parent_uuid: string, order: number): void {
     console.log(`    [[[${this.uuid}]]]`);
     console.log('      type = VPaned');
     console.log('      parent = ' + parent_uuid);
     console.log('      order = ' + order);
-    console.log('      ratio = 0.5');
+    console.log('      ratio = ' + (this.ratio ?? '0.5'));
     this.first_element.render(this.uuid, 0);
     this.second_element.render(this.uuid, 1);
   }
@@ -295,7 +299,68 @@ class Config {
   }
 }
 
+type ElemNode = {
+  weigh: number
+  content: ContainedLayoutElement
+}
 
+function parseHorizontalSpread(jsonHorizontalSpreadElements: any[]): ContainedLayoutElement {
+  const amount = jsonHorizontalSpreadElements.length
+  const rendered_elements: ContainedLayoutElement[] = []
+  for (const jsonHorizontalSpreadElement of jsonHorizontalSpreadElements) {
+    rendered_elements.push(parseLayoutElement(jsonHorizontalSpreadElement))
+  }
+  let element_node_list: ElemNode[] = rendered_elements.map((elem): ElemNode => { return { weigh: 1, content: elem } })
+  while (element_node_list.length > 1) {
+    let i = 0, insertion_count = 0
+    for (; i < element_node_list.length; i += 2, insertion_count++) {
+      if (element_node_list[i + 1]) {
+        const new_node: ElemNode = {
+          weigh: element_node_list[i].weigh + element_node_list[i + 1].weigh,
+          content: new HorizontalSplitElement(
+            element_node_list[i].content,
+            element_node_list[i + 1].content,
+            (element_node_list[i].weigh / (element_node_list[i].weigh + element_node_list[i + 1].weigh)).toFixed(16)
+          )
+        }
+        element_node_list[insertion_count] = new_node
+      } else { element_node_list[insertion_count] = element_node_list[i] }
+    }
+    while ( element_node_list.length > insertion_count){
+      element_node_list.pop()
+    }
+  }
+  return element_node_list[0].content
+}
+
+function parseVerticalSpread(jsonVerticalSpreadElements: any[]): ContainedLayoutElement {
+  const amount = jsonVerticalSpreadElements.length
+  const rendered_elements: ContainedLayoutElement[] = []
+  for (const jsonVerticalSpreadElement of jsonVerticalSpreadElements) {
+    rendered_elements.push(parseLayoutElement(jsonVerticalSpreadElement))
+  }
+  let element_node_list: ElemNode[] = rendered_elements.map((elem): ElemNode => { return { weigh: 1, content: elem } })
+  while (element_node_list.length > 1) {
+    let i = 0, insertion_count = 0
+    for (; i < element_node_list.length; i += 2, insertion_count++) {
+      if (element_node_list[i + 1]) {
+        const new_node: ElemNode = {
+          weigh: element_node_list[i].weigh + element_node_list[i + 1].weigh,
+          content: new VerticalSplitElement(
+            element_node_list[i].content,
+            element_node_list[i + 1].content,
+            (element_node_list[i].weigh / (element_node_list[i].weigh + element_node_list[i + 1].weigh)).toFixed(16)
+          )
+        }
+        element_node_list[insertion_count] = new_node
+      } else { element_node_list[insertion_count] = element_node_list[i] }
+    }
+    while ( element_node_list.length > insertion_count){
+      element_node_list.pop()
+    }
+  }
+  return element_node_list[0].content
+}
 
 
 
@@ -357,6 +422,10 @@ function parseLayoutElement(jsonElement: any): LayoutElement {
     const firstElement = parseLayoutElement(jsonElement.first_element);
     const secondElement = parseLayoutElement(jsonElement.second_element);
     return new VerticalSplitElement(firstElement, secondElement);
+  } else if (jsonElement.type === "horizontal_spread") {
+    return parseHorizontalSpread(jsonElement.elements)
+  } else if (jsonElement.type === "vertical_spread") {
+    return parseVerticalSpread(jsonElement.elements)
   } else {
     throw new Error("Invalid LayoutElement type: " + JSON.stringify(jsonElement));
   }
@@ -419,12 +488,12 @@ function parseConfig(jsonConfig: any): Config {
 //Thanks to https://gist.github.com/kristopherjohnson/5065599
 
 const stdin = process.stdin
-const inputChunks:any = [];
+const inputChunks: any = [];
 
 stdin.setEncoding('utf8');
 
 stdin.on('data', function (chunk) {
-    inputChunks.push(chunk);
+  inputChunks.push(chunk);
 });
 
 stdin.on('end', function () {
