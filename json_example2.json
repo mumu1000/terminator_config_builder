@@ -60,7 +60,7 @@
   ],
   "layouts": [
     {
-      "name": "Openstack DEV",
+      "name": "default",
       "windows": [
         {
           "maximised": "True",
