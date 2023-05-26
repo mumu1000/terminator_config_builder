@@ -1,4 +1,4 @@
-#Terminator config genrator from JSON
+# Terminator config genrator from JSON
 
 
 Will generate a valid Terminator (https://github.com/gnome-terminator/terminator) config file from JSON specifications.
