@@ -110,13 +110,15 @@ class NotebookElement extends AnyLayoutElement {
     super("notebook")
   }
   render(parent_uuid: string, order: number): void {
-    console.log('    [[[' + this.uuid + ']]]');
-    console.log('      type = Notebook');
-    console.log('      parent = ' + parent_uuid);
-    console.log(`      order = 0`);
-    console.log('      labels = ' + this.tabs.map(tab => tab.title).join(', '));
-    console.log('      active_page = 0');
-    this.tabs.forEach((tab, idx) => tab.render(this.uuid, idx));
+    if (this.tabs.length >=2){
+      console.log('    [[[' + this.uuid + ']]]');
+      console.log('      type = Notebook');
+      console.log('      parent = ' + parent_uuid);
+      console.log(`      order = 0`);
+      console.log('      labels = ' + this.tabs.map(tab => tab.title).join(', '));
+      console.log('      active_page = 0');
+    }else{console.error("WARN: Notebooks with less than 2 elements are ignored")}
+    this.tabs.forEach((tab, idx) => tab.render((this.tabs.length >=2) ? this.uuid : parent_uuid, idx));
   }
 }
 
